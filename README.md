@@ -30,7 +30,7 @@ class SWOTAnalyzerApp:
             ttk.Label(row, text=question, width=70, wraplength=600).pack(side='left')
             
             self.sliders[f"{category}_{i}"] = tk.IntVar(value=3)
-            # إصلاح الأقواس هنا
+            # 
             scale = ttk.Scale(
                 row, 
                 from_=1, 
@@ -239,3 +239,19 @@ if __name__ == "__main__":
         print(f"Icon error: {e}")
     app = SWOTAnalyzerApp(root)
     root.mainloop()
+name: Build Executable
+     on: [push]
+     jobs:
+       build:
+         runs-on: windows-latest
+         steps:
+           - uses: actions/checkout@v2
+           - name: Install dependencies
+             run: pip install pyinstaller
+           - name: Build EXE
+             run: pyinstaller --onefile --windowed --icon=swot_icon.ico SWOT_Analyzer.py
+           - name: Upload Artifact
+             uses: actions/upload-artifact@v2
+             with:
+               name: SWOT_Analyzer.exe
+               path: dist/SWOT_Analyzer.exe
